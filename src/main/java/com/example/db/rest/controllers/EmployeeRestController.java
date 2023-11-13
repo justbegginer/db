@@ -1,10 +1,12 @@
 package com.example.db.rest.controllers;
 
 import com.example.db.models.Employee;
+import com.example.db.services.impls.DepartmentEmployeeServiceImpl;
 import com.example.db.services.impls.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +17,12 @@ import java.util.Optional;
 public class EmployeeRestController {
     private final EmployeeServiceImpl employeeService;
 
+    private final DepartmentEmployeeServiceImpl departmentEmployeeService;
+
     @Autowired
-    public EmployeeRestController(EmployeeServiceImpl employeeService) {
+    public EmployeeRestController(EmployeeServiceImpl employeeService, DepartmentEmployeeServiceImpl departmentEmployeeService) {
         this.employeeService = employeeService;
+        this.departmentEmployeeService = departmentEmployeeService;
     }
 
     @GetMapping("/{id}")
@@ -41,9 +46,13 @@ public class EmployeeRestController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteEmployee(@RequestBody Employee employee) {
-        employeeService.delete(employee);
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") int id) {
+        if (departmentEmployeeService.findByEmployeeId(id).isPresent()) {
+            departmentEmployeeService.delete(departmentEmployeeService.findByEmployeeId(id).get());
+        }
+        employeeService.delete(employeeService.findById(id).get());
         return ResponseEntity.ok().build();
     }
 
