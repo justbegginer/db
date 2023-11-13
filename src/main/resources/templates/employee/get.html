@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о сотруднике</title>
+    <!-- Подключение стилей, если необходимо -->
+</head>
+<body>
+
+<div id="employeeInfo" th:attr="employee_id=${id}">
+    <!-- Информация о сотруднике будет загружена сюда -->
+</div>
+<button id="deleteButton">Удалить сотрудника</button>
+<button id="editButton">Редактировать сотрудника</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var employeeId = $('#employeeInfo').attr('employee_id');
+        //console.log(employeeId);
+        $.ajax({
+            url: '/rest/employee/'+employeeId,
+            type: 'GET',
+            success: function(data) {
+                var employee = data;
+                $('#employeeInfo').html(
+                    '<p>ID: ' + employee.id + '</p>' +
+                    '<p>Имя: ' + employee.firstName + '</p>' +
+                    '<p>Отчество: ' + employee.patherName + '</p>' +
+                    '<p>Фамилия: ' + employee.lastName + '</p>' +
+                    '<p>Должность: ' + employee.position + '</p>' +
+                    '<p>Зарплата: ' + employee.salary + '</p>'
+                );
+            },
+            error: function(request, errorType, errorMessage) {
+                alert('Ошибка: ' + errorType + ' с сообщением: ' + errorMessage);
+            }
+        });
+
+        $('#deleteButton').click(function() {
+            deleteEmployee(employeeId);
+        });
+
+        $('#editButton').click(function() {
+            window.location.href = '/employee/edit/'+employeeId;
+        });
+
+
+
+        function deleteEmployee(employeeId) {
+            $.ajax({
+                url: '/rest/employee/' + employeeId,
+                type: 'DELETE',
+                success: function() {
+                    window.location.href = '/employee';
+                },
+                error: function(request, errorType, errorMessage) {
+                    alert('Ошибка удаления: ' + errorType + ' с сообщением: ' + errorMessage);
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

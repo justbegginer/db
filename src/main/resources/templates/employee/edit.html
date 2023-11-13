@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование информации о сотруднике</title>
+    <!-- Подключение стилей, если необходимо -->
+    <style>
+        /* Добавьте сюда стили для формы */
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Редактирование сотрудника</h2>
+<div id="employeeForm" th:attr="employee_id=${id}">
+    <div class="form-group">
+        <label for="firstName">Имя:</label>
+        <input type="text" id="firstName">
+    </div>
+    <div class="form-group">
+        <label for="patherName">Отчество:</label>
+        <input type="text" id="patherName">
+    </div>
+    <div class="form-group">
+        <label for="lastName">Фамилия:</label>
+        <input type="text" id="lastName">
+    </div>
+    <div class="form-group">
+        <label for="position">Должность:</label>
+        <input type="text" id="position">
+    </div>
+    <div class="form-group">
+        <label for="salary">Зарплата:</label>
+        <input type="number" id="salary">
+    </div>
+    <button id="saveButton">Сохранить изменения</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var employeeId; // ИД сотрудника, который нужно отредактировать
+
+    $(document).ready(function() {
+        // Пример получения ИД сотрудника, который нужно отредактировать
+        employeeId = $('#employeeForm').attr('employee_id');
+        if (employeeId) {
+            fetchEmployeeData(employeeId);
+        }
+
+        $('#saveButton').click(function() {
+            var employeeData = {
+                firstName: $('#firstName').val(),
+                patherName: $('#patherName').val(),
+                lastName: $('#lastName').val(),
+                position: $('#position').val(),
+                salary: $('#salary').val()
+            };
+
+            updateEmployee(employeeId, employeeData);
+        });
+    });
+
+    function fetchEmployeeData(employeeId) {
+        $.ajax({
+            url: '/rest/employee/' + employeeId,
+            type: 'GET',
+            success: function(data) {
+                $('#firstName').val(data.firstName);
+                $('#patherName').val(data.patherName);
+                $('#lastName').val(data.lastName);
+                $('#position').val(data.position);
+                $('#salary').val(data.salary);
+            },
+            error: function(request, errorType, errorMessage) {
+                alert('Ошибка: ' + errorType + ' с сообщением: ' + errorMessage);
+            }
+        });
+    }
+
+    function updateEmployee(employeeId, employeeData) {
+        $.ajax({
+            url: '/rest/employee',
+            type: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify(employeeData),
+            success: function() {
+                window.location.href = '/employee'; // Перенаправление на список сотрудников
+            },
+            error: function(request, errorType, errorMessage) {
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
