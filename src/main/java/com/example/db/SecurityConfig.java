@@ -1,12 +1,14 @@
 package com.example.db;
 
 
+import com.example.db.models.User;
+import com.example.db.services.impls.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,18 +45,27 @@ public class SecurityConfig {
 
 
     @Bean
-    protected UserDetailsService userDetailsService() {
+    protected UserDetailsService userDetailsService(@Autowired UserServiceImpl userService) {
         List<UserDetails> springSecurityUserList = new ArrayList<>();
-        springSecurityUserList.add(User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles(Role.ADMIN.name())
-                .build());
-        springSecurityUserList.add(User.builder()
-                .username("observer")
-                .password(passwordEncoder().encode("observer"))
-                .roles(Role.OBSERVER.name())
-                .build());
+        List<User> userList = userService.findAll();
+        for (User user : userList) {
+            springSecurityUserList.add(org.springframework.security.core.userdetails.User.builder()
+                    .username(user.getLogin())
+                    .password(passwordEncoder().encode(user.getPassword()))
+                    .roles(user.getRole())
+                    .build()
+            );
+        }
+//        springSecurityUserList.add(User.builder()
+//                .username("admin")
+//                .password(passwordEncoder().encode("admin"))
+//                .roles(Role.ADMIN.name())
+//                .build());
+//        springSecurityUserList.add(User.builder()
+//                .username("observer")
+//                .password(passwordEncoder().encode("observer"))
+//                .roles(Role.OBSERVER.name())
+//                .build());
         return new InMemoryUserDetailsManager(
                 springSecurityUserList
         );
