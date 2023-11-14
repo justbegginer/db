@@ -26,7 +26,7 @@ public class EmployeeRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable("id") long id) {
+    public ResponseEntity<Employee> getEmployee(@PathVariable("id") int id) {
         Optional<Employee> employee = employeeService.findById(id);
         if (employee.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);

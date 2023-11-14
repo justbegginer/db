@@ -8,7 +8,7 @@ public interface CrudService <T>{
 
     void save(T elem);
 
-    Optional<T> findById(long id);
+    Optional<T> findById(int id);
 
     List<T> findAll();
 }
