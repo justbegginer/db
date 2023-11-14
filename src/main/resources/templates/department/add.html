@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление департамента</title>
+    <!-- Подключение стилей, если необходимо -->
+</head>
+<body>
+
+<h2>Добавить нового департамент</h2>
+<form id="employeeForm">
+    <label for="name">Название:</label>
+
+    <input type="text" id="name" name="name" required>
+
+    <input type="button" id="submitButton" value="Добавить">
+</form>
+
+<div id="responseMessage"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#submitButton').click(function() {
+            var departmentData = {
+                name: $('#name').val(),
+            };
+
+            $.ajax({
+                url: '/rest/department',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(departmentData),
+                success: function(response) {
+                    $('#responseMessage').html('<p>Департамент добавлен успешно!</p>');
+                    $('#employeeForm').trigger("reset");
+                },
+                error: function(xhr, status, error) {
+                    $('#responseMessage').html('<p>Ошибка добавления сотрудника: ' + xhr.responseText + '</p>');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

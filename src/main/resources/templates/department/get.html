@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о департаменте</title>
+    <!-- Подключение стилей, если необходимо -->
+</head>
+<body>
+
+<div id="departmentInfo" th:attr="department_id=${id}">
+    <!-- Информация о сотруднике будет загружена сюда -->
+</div>
+<button id="deleteButton">Удалить сотрудника</button>
+<button id="editButton">Редактировать сотрудника</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var departmentId = $('#departmentInfo').attr('department_id');
+        //console.log(employeeId);
+        $.ajax({
+            url: '/rest/department/'+departmentId,
+            type: 'GET',
+            success: function(data) {
+                var employee = data;
+                $('#employeeInfo').html(
+                    '<p>ID: ' + department.id + '</p>' +
+                    '<p>Имя: ' + department.name + '</p>'
+                );
+            },
+            error: function(request, errorType, errorMessage) {
+                alert('Ошибка: ' + errorType + ' с сообщением: ' + errorMessage);
+            }
+        });
+
+        $('#deleteButton').click(function() {
+            deleteEmployee(departmentId);
+        });
+
+        $('#editButton').click(function() {
+            window.location.href = '/department/edit/'+departmentId;
+        });
+
+
+
+        function deleteEmployee(departmentId) {
+            $.ajax({
+                url: '/rest/department/' + departmentId,
+                type: 'DELETE',
+                success: function() {
+                    window.location.href = '/department';
+                },
+                error: function(request, errorType, errorMessage) {
+                    alert('Ошибка удаления: ' + errorType + ' с сообщением: ' + errorMessage);
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

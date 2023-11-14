@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список департаментов</title>
+    <link rel="stylesheet" type="text/css" href="all.css">
+
+</head>
+<body>
+
+<h2>Список департаментов</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Название</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<button id="addButton">Добавить новый департамент</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function loadDepartments() {
+            $.ajax({
+                url: '/rest/department',
+                type: 'GET',
+                success: function (departments) {
+                    const tableBody = $('.table tbody');
+
+                    tableBody.empty();
+
+                    departments.forEach(function (department) {
+                        var departmentRow = $('<tr></tr>');
+                        departmentRow.append('<td><a href="/department/' + department.id + '" class="link">' + department.name + '</a></td>');
+                        tableBody.append(departmentRow);
+                    });
+                },
+                error: function (request, errorType, errorMessage) {
+                    alert('Ошибка: ' + errorType + ' с сообщением: ' + errorMessage);
+                }
+            });
+        }
+
+        $('#addEmployeeButton').click(function () {
+            window.location.href = '/department/add';
+        });
+
+        loadDepartments();
+    });
+</script>
+
+</body>
+</html>

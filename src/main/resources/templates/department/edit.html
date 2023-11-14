@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование информации о департаменте</title>
+    <!-- Подключение стилей, если необходимо -->
+    <link rel="stylesheet" type="text/css" href="edit.css">
+</head>
+<body>
+
+<h2>Редактирование департамента</h2>
+<div id="departmentForm" th:attr="department_id=${id}">
+    <div class="form-group">
+        <label for="name">Имя:</label>
+        <input type="text" id="name">
+    </div>
+
+    <button id="saveButton">Сохранить изменения</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var departmentId;
+
+    $(document).ready(function() {
+        departmentId = $('#employeeForm').attr('department_id');
+        if (departmentId) {
+            fetchEmployeeData(departmentId);
+        }
+
+        $('#saveButton').click(function() {
+            var departmentData = {
+                name: $('#name').val()
+            };
+
+            updateEmployee(departmentId, departmentData);
+        });
+    });
+
+    function fetchEmployeeData(departmentId) {
+        $.ajax({
+            url: '/rest/department/' + departmentId,
+            type: 'GET',
+            success: function(data) {
+                $('#name').val(data.name);
+            },
+            error: function(request, errorType, errorMessage) {
+                alert('Ошибка: ' + errorType + ' с сообщением: ' + errorMessage);
+            }
+        });
+    }
+
+    function updateEmployee(departmentId, departmentData) {
+        $.ajax({
+            url: '/rest/department',
+            type: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify(departmentData),
+            success: function() {
+                window.location.href = '/department'; // Перенаправление на список сотрудников
+            },
+            error: function(request, errorType, errorMessage) {
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
