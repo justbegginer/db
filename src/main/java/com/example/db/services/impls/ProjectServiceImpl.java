@@ -30,7 +30,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Optional<Project> findById(long id) {
+    public Optional<Project> findById(int id) {
         return projectRepo.findById(id);
     }
 

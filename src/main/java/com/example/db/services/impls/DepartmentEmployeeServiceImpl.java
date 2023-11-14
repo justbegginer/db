@@ -30,7 +30,7 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     }
 
     @Override
-    public Optional<DepartmentEmployee> findById(long id) {
+    public Optional<DepartmentEmployee> findById(int id) {
         return departmentEmployeeRepo.findById(id);
     }
 

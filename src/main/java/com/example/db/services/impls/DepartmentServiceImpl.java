@@ -31,7 +31,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Optional<Department> findById(long id) {
+    public Optional<Department> findById(int id) {
         return departmentRepo.findById(id);
     }
 
