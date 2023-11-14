@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о проекте</title>
+    <!-- Подключение стилей, если необходимо -->
+</head>
+<body>
+
+<div id="projectInfo" th:attr="data-project-id=${id}">
+    <!-- Информация о проекте будет загружена сюда -->
+</div>
+<button id="deleteButton">Удалить проект</button>
+<button id="editButton">Редактировать проект</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var projectId = $('#projectInfo').attr('data-project-id');
+        fetchProject(projectId);
+
+        $('#deleteButton').click(function() {
+            deleteProject(projectId);
+        });
+
+        $('#editButton').click(function() {
+            window.location.href = '/project/edit/'+projectId;
+        });
+
+        function fetchProject(projectId) {
+            $.ajax({
+                url: '/rest/project/' + projectId,
+                type: 'GET',
+                success: function(project) {
+                    $('#projectInfo').html(
+                        '<p>ID: ' + project.id + '</p>' +
+                        '<p>Название: ' + project.name + '</p>' +
+                        '<p>Стоимость: ' + project.cost + '</p>' +
+                        '<p>ID отдела: ' + project.departmentId + '</p>' +
+                        '<p>Дата начала: ' + formatDate(project.dateBegging) + '</p>' +
+                        '<p>Дата окончания: ' + formatDate(project.dateEnd) + '</p>' +
+                        '<p>Реальная дата окончания: ' + formatDate(project.dateEndReal) + '</p>'
+                    );
+                },
+                error: function(request, errorType, errorMessage) {
+                    alert('Ошибка: ' + errorType + ' с сообщением: ' + errorMessage);
+                }
+            });
+        }
+
+        function deleteProject(projectId) {
+            if(confirm('Вы уверены, что хотите удалить этот проект?')) {
+                $.ajax({
+                    url: '/rest/project/' + projectId,
+                    type: 'DELETE',
+                    success: function() {
+                        alert('Проект удален');
+                        window.location.href = '/project';
+                    },
+                    error: function(request, errorType, errorMessage) {
+                        alert('Ошибка удаления: ' + errorType + ' с сообщением: ' + errorMessage);
+                    }
+                });
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            var date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU');
+        }
+    });
+</script>
+</body>
+</html>

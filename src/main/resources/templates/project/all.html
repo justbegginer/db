@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список проектов</title>
+    <link rel="stylesheet" type="text/css" href="projects.css">
+</head>
+<body>
+
+<h2>Список проектов</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Стоимость</th>
+        <th>Дата начала</th>
+        <th>Дата окончания</th>
+        <th>Реальная дата окончания</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Проекты будут добавлены здесь -->
+    </tbody>
+</table>
+
+<button id="addButton">Добавить новый проект</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function loadProjects() {
+            $.ajax({
+                url: '/rest/project',
+                type: 'GET',
+                success: function (projects) {
+                    const tableBody = $('.table tbody');
+
+                    tableBody.empty();
+
+                    projects.forEach(function (project) {
+                        var projectRow = $('<tr></tr>');
+                        projectRow.append('<td><a href="/project/' + project.id + '">' + project.name + '</a></td>');
+                        projectRow.append('<td>' + project.cost + '</td>');
+                        projectRow.append('<td>' + project.departmentId + '</td>');
+                        projectRow.append('<td>' + formatDate(project.dateBegging) + '</td>');
+                        projectRow.append('<td>' + formatDate(project.dateEnd) + '</td>');
+                        projectRow.append('<td>' + formatDate(project.dateEndReal) + '</td>');
+                        tableBody.append(projectRow);
+                    });
+                },
+                error: function (request, errorType, errorMessage) {
+                    alert('Ошибка: ' + errorType + ' с сообщением: ' + errorMessage);
+                }
+            });
+        }
+
+        $('#addProjectButton').click(function () {
+            window.location.href = '/project/add';
+        });
+
+        loadProjects();
+    });
+
+    function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ru-RU');
+    }
+</script>
+
+</body>
+</html>

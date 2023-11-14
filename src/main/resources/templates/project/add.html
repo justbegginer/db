@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление проекта</title>
+    <!-- Подключение стилей, если необходимо -->
+</head>
+<body>
+
+<h2>Добавить новый проект</h2>
+<form id="projectForm">
+    <label for="name">Название:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="cost">Стоимость:</label>
+    <input type="number" id="cost" name="cost" required>
+
+    <label for="dateBegging">Дата начала:</label>
+    <input type="date" id="dateBegging" name="dateBegging" required>
+
+    <label for="dateEnd">Планируемая дата окончания:</label>
+    <input type="date" id="dateEnd" name="dateEnd">
+
+    <label for="dateEndReal">Фактическая дата окончания:</label>
+    <input type="date" id="dateEndReal" name="dateEndReal">
+
+    <input type="button" id="submitButton" value="Добавить">
+</form>
+
+<div id="responseMessage"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#submitButton').click(function() {
+            var projectData = {
+                name: $('#name').val(),
+                cost: $('#cost').val(),
+                departmentId: $('#departmentId').val(),
+                dateBegging: $('#dateBegging').val(),
+                dateEnd: $('#dateEnd').val(),
+                dateEndReal: $('#dateEndReal').val()
+            };
+
+            $.ajax({
+                url: '/rest/project',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(projectData),
+                success: function(response) {
+                    $('#responseMessage').html('<p>Проект добавлен успешно!</p>');
+                    $('#projectForm').trigger("reset");
+                },
+                error: function(xhr, status, error) {
+                    $('#responseMessage').html('<p>Ошибка добавления проекта: ' + xhr.responseText + '</p>');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

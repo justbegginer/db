@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование информации о проекте</title>
+    <!-- Подключение стилей, если необходимо -->
+    <link rel="stylesheet" type="text/css" href="edit.css">
+</head>
+<body>
+
+<h2>Редактирование проекта</h2>
+<div id="projectForm" th:attr="data-project-id=${id}">
+    <div class="form-group">
+        <label for="name">Название:</label>
+        <input type="text" id="name">
+    </div>
+    <div class="form-group">
+        <label for="cost">Стоимость:</label>
+        <input type="number" id="cost">
+    </div>
+    <div class="form-group">
+        <label for="departmentId">ID отдела:</label>
+        <input type="number" id="departmentId">
+    </div>
+    <div class="form-group">
+        <label for="dateBegging">Дата начала:</label>
+        <input type="date" id="dateBegging">
+    </div>
+    <div class="form-group">
+        <label for="dateEnd">Дата окончания:</label>
+        <input type="date" id="dateEnd">
+    </div>
+    <div class="form-group">
+        <label for="dateEndReal">Реальная дата окончания:</label>
+        <input type="date" id="dateEndReal">
+    </div>
+    <button id="saveButton">Сохранить изменения</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var projectId; // ID проекта, который нужно отредактировать
+
+    $(document).ready(function() {
+        projectId = $('#projectForm').data('project-id');
+        if (projectId) {
+            fetchProjectData(projectId);
+        }
+
+        $('#saveButton').click(function() {
+            var projectData = {
+                name: $('#name').val(),
+                cost: $('#cost').val(),
+                departmentId: $('#departmentId').val(),
+                dateBegging: $('#dateBegging').val(),
+                dateEnd: $('#dateEnd').val(),
+                dateEndReal: $('#dateEndReal').val()
+            };
+
+            updateProject(projectId, projectData);
+        });
+    });
+
+    function fetchProjectData(projectId) {
+        $.ajax({
+            url: '/rest/project/' + projectId,
+            type: 'GET',
+            success: function(project) {
+                $('#name').val(project.name);
+                $('#cost').val(project.cost);
+                $('#departmentId').val(project.departmentId);
+                $('#dateBegging').val(project.dateBegging);
+                $('#dateEnd').val(project.dateEnd);
+                $('#dateEndReal').val(project.dateEndReal);
+            },
+            error: function(request, errorType, errorMessage) {
+                alert('Ошибка: ' + errorType + ' с сообщением: ' + errorMessage);
+            }
+        });
+    }
+
+    function updateProject(projectId, projectData) {
+        $.ajax({
+            url: '/rest/project/' + projectId,
+            type: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify(projectData),
+            success: function() {
+                alert('Проект обновлен');
+                window.location.href = '/projects'; // Перенаправление на список проектов
+            },
+            error: function(request, errorType, errorMessage) {
+                alert('Ошибка обновления: ' + errorType + ' с сообщением: ' + errorMessage);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
