@@ -4,25 +4,7 @@
     <meta charset="UTF-8">
     <title>Редактирование информации о сотруднике</title>
     <!-- Подключение стилей, если необходимо -->
-    <style>
-        /* Добавьте сюда стили для формы */
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        label {
-            display: block;
-        }
-
-        input[type="text"],
-        input[type="number"] {
-            width: 100%;
-        }
-
-        button {
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="edit.css">
 </head>
 <body>
 
@@ -53,13 +35,13 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    var employeeId; // ИД сотрудника, который нужно отредактировать
+    var departmentId; // ИД сотрудника, который нужно отредактировать
 
     $(document).ready(function() {
         // Пример получения ИД сотрудника, который нужно отредактировать
-        employeeId = $('#employeeForm').attr('employee_id');
-        if (employeeId) {
-            fetchEmployeeData(employeeId);
+        departmentId = $('#employeeForm').attr('employee_id');
+        if (departmentId) {
+            fetchEmployeeData(departmentId);
         }
 
         $('#saveButton').click(function() {
@@ -71,7 +53,7 @@
                 salary: $('#salary').val()
             };
 
-            updateEmployee(employeeId, employeeData);
+            updateEmployee(departmentId, employeeData);
         });
     });
 

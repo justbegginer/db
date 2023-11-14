@@ -3,30 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Список сотрудников</title>
-    <style>
-        .employees-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+    <link rel="stylesheet" type="text/css" href="all.css">
 
-        .employees-table th, .employees-table td {
-            border: 1px solid #cccccc;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .employee-link {
-            display: block;
-            color: inherit;
-            text-decoration: inherit;
-        }
-    </style>
 </head>
 <body>
 
 <h2>Список сотрудников</h2>
-<table class="employees-table">
+<table class="table">
     <thead>
     <tr>
         <th>Имя</th>
@@ -39,7 +22,7 @@
     </tbody>
 </table>
 
-<button id="addEmployeeButton">Добавить нового сотрудника</button>
+<button id="addButton">Добавить нового сотрудника</button>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -49,13 +32,13 @@
                 url: '/rest/employee',
                 type: 'GET',
                 success: function (employees) {
-                    const tableBody = $('.employees-table tbody');
+                    const tableBody = $('.table tbody');
 
                     tableBody.empty();
 
                     employees.forEach(function (employee) {
                         var employeeRow = $('<tr></tr>');
-                        employeeRow.append('<td><a href="/employee/' + employee.id + '" class="employee-link">' + employee.firstName + '</a></td>');
+                        employeeRow.append('<td><a href="/employee/' + employee.id + '" class="link">' + employee.firstName + '</a></td>');
                         employeeRow.append('<td>' + employee.patherName + '</td>');
                         employeeRow.append('<td>' + employee.lastName + '</td>');
                         employeeRow.append('<td>' + employee.position + '</td>');
