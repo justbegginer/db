@@ -10,20 +10,20 @@
 <div id="departmentInfo" th:attr="department_id=${id}">
     <!-- Информация о сотруднике будет загружена сюда -->
 </div>
-<button id="deleteButton">Удалить сотрудника</button>
-<button id="editButton">Редактировать сотрудника</button>
+<button id="deleteButton">Удалить департамент</button>
+<button id="editButton">Редактировать департамент</button>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         var departmentId = $('#departmentInfo').attr('department_id');
-        //console.log(employeeId);
+        console.log(departmentId);
         $.ajax({
             url: '/rest/department/'+departmentId,
             type: 'GET',
             success: function(data) {
-                var employee = data;
-                $('#employeeInfo').html(
+                var department = data;
+                $('#departmentInfo').html(
                     '<p>ID: ' + department.id + '</p>' +
                     '<p>Имя: ' + department.name + '</p>'
                 );

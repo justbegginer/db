@@ -12,6 +12,7 @@
 </div>
 <button id="deleteButton">Удалить проект</button>
 <button id="editButton">Редактировать проект</button>
+<button id="gotoDepartment">Перейти к департаменту проекта</button>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -26,6 +27,9 @@
         $('#editButton').click(function() {
             window.location.href = '/project/edit/'+projectId;
         });
+        $('#gotoDepartment').click(function () {
+            window.location.href = "/project/redirect/"+projectId;
+        })
 
         function fetchProject(projectId) {
             $.ajax({
@@ -33,7 +37,6 @@
                 type: 'GET',
                 success: function(project) {
                     $('#projectInfo').html(
-                        '<p>ID: ' + project.id + '</p>' +
                         '<p>Название: ' + project.name + '</p>' +
                         '<p>Стоимость: ' + project.cost + '</p>' +
                         '<p>ID отдела: ' + project.departmentId + '</p>' +

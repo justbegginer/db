@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Информация о сотруднике</title>
-    <!-- Подключение стилей, если необходимо -->
 </head>
 <body>
 
@@ -12,6 +11,8 @@
 </div>
 <button id="deleteButton">Удалить сотрудника</button>
 <button id="editButton">Редактировать сотрудника</button>
+<button id="linkButton">Привязать сотрудника к департаменту</button>
+<button id="gotoDepartment">Перейти к департаменту сотрудника</button>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -45,6 +46,12 @@
             window.location.href = '/employee/edit/'+employeeId;
         });
 
+        $('#linkButton').click(function (){
+            window.location.href = '/departmentEmployee/'+employeeId;
+        })
+        $('#gotoDepartment').click(function () {
+            window.location.href = '/departmentEmployee/redirect/'+employeeId;
+        })
 
 
         function deleteEmployee(employeeId) {
