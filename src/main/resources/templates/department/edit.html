@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Редактирование информации о департаменте</title>
-    <!-- Подключение стилей, если необходимо -->
-    <link rel="stylesheet" type="text/css" href="edit.css">
+    <!-- Подключение стилей, если необходимо
+    <link rel="stylesheet" type="text/css" href="edit.css">-->
 </head>
 <body>
 
@@ -23,7 +23,8 @@
     var departmentId;
 
     $(document).ready(function() {
-        departmentId = $('#employeeForm').attr('department_id');
+        departmentId = $('#departmentForm').attr('department_id');
+        console.log(departmentId);
         if (departmentId) {
             fetchEmployeeData(departmentId);
         }
@@ -33,7 +34,7 @@
                 name: $('#name').val()
             };
 
-            updateEmployee(departmentId, departmentData);
+            updateDepartment(departmentId, departmentData);
         });
     });
 
@@ -50,9 +51,9 @@
         });
     }
 
-    function updateEmployee(departmentId, departmentData) {
+    function updateDepartment(departmentId, departmentData) {
         $.ajax({
-            url: '/rest/department',
+            url: '/rest/department/'+departmentId,
             type: 'PATCH',
             contentType: 'application/json',
             data: JSON.stringify(departmentData),

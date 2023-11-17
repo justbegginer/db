@@ -35,13 +35,13 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    var departmentId; // ИД сотрудника, который нужно отредактировать
+    var employeeId; // ИД сотрудника, который нужно отредактировать
 
     $(document).ready(function() {
         // Пример получения ИД сотрудника, который нужно отредактировать
-        departmentId = $('#employeeForm').attr('employee_id');
-        if (departmentId) {
-            fetchEmployeeData(departmentId);
+        employeeId = $('#employeeForm').attr('employee_id');
+        if (employeeId) {
+            fetchEmployeeData(employeeId);
         }
 
         $('#saveButton').click(function() {
@@ -76,7 +76,7 @@
 
     function updateEmployee(employeeId, employeeData) {
         $.ajax({
-            url: '/rest/employee',
+            url: '/rest/employee/'+employeeId,
             type: 'PATCH',
             contentType: 'application/json',
             data: JSON.stringify(employeeData),
