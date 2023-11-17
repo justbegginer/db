@@ -21,7 +21,7 @@ public class Project {
 
     private int cost;
 
-    private int departmentId;
+    private Integer departmentId;
 
     @Column(name = "date_beg")
     private LocalDate dateBegging;
