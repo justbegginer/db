@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Связать сотрудника с департаментом</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Подключите сюда ваш CSS файл, если необходимо -->
+</head>
+<body>
+
+<h2>Выберите департамент для сотрудника с ID: <span th:text="${id}"></span></h2>
+
+<ul id="departmentsList">
+    <!-- Список департаментов будет загружен здесь -->
+</ul>
+
+<script>
+    $(document).ready(function() {
+        // Загрузка списка департаментов
+        $.ajax({
+            url: '/rest/department',
+            type: 'GET',
+            success: function(departments) {
+                // Предполагается, что ответ содержит массив департаментов
+                departments.forEach(function(department) {
+                    $('#departmentsList').append(
+                        '<li onclick="linkEmployee(' + department.id + ')">' +
+                        department.name +
+                        '</li>'
+                    );
+                });
+            }
+        });
+
+        window.linkEmployee = function(departmentId) {
+            var employeeId = [[${id}]];
+            var departmentEmployee = {
+                departmentId: departmentId,
+                employeeId: employeeId
+            };
+
+            // Отправка данных на сервер
+            $.ajax({
+                url: '/rest/department_employee',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(departmentEmployee),
+                success: function() {
+                    alert('Сотрудник успешно связан с департаментом!');
+                },
+                error: function() {
+                    alert('Произошла ошибка при связывании сотрудника с департаментом.');
+                }
+            });
+        };
+    });
+</script>
+
+</body>
+</html>
