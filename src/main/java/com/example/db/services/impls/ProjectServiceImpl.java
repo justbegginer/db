@@ -38,4 +38,9 @@ public class ProjectServiceImpl implements ProjectService {
     public List<Project> findAll() {
         return projectRepo.findAll();
     }
+
+    @Override
+    public List<Project> findAllByDepartmentId(int id) {
+        return projectRepo.findAllByDepartmentId(id);
+    }
 }

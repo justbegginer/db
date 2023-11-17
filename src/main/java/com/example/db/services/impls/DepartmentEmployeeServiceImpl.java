@@ -43,4 +43,9 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     public Optional<DepartmentEmployee> findByEmployeeId(int id) {
         return departmentEmployeeRepo.findDepartmentEmployeeByEmployeeId(id);
     }
+
+    @Override
+    public List<DepartmentEmployee> findAllByDepartmentId(int id) {
+        return departmentEmployeeRepo.findAllByDepartmentId(id);
+    }
 }
