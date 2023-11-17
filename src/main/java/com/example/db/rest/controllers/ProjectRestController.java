@@ -42,14 +42,14 @@ public class ProjectRestController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteEmployee(@RequestBody Project project) {
-        projectService.delete(project);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") int id) {
+        projectService.delete(projectService.findById(id).get());
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping
-    public ResponseEntity<Void> updateEmployee(@RequestBody Project project) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateEmployee(@PathVariable("id") int id, @RequestBody Project project) {
         projectService.save(project);
         return ResponseEntity.ok().build();
     }

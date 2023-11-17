@@ -56,8 +56,9 @@ public class EmployeeRestController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping
-    public ResponseEntity<Void> updateEmployee(@RequestBody Employee employee) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateEmployee(@PathVariable("id") int id, @RequestBody Employee employee) {
+        employee.setId(id);
         if (employeeService.findEmployeeByFullName
                 (employee.getFirstName(), employee.getPatherName(), employee.getLastName()).isPresent()) {
             return ResponseEntity.badRequest().build();// TODO detalize error-response message

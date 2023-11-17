@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("rest/department")
+@RequestMapping("/rest/department")
 public class DepartmentRestController {
 
     private final DepartmentServiceImpl departmentService;
@@ -43,14 +43,16 @@ public class DepartmentRestController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteEmployee(@RequestBody Department department) {
-        departmentService.delete(department);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") int id) {
+        departmentService.delete(departmentService.findById(id).get());
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping
-    public ResponseEntity<Void> updateEmployee(@RequestBody Department department) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateEmployee(@PathVariable("id")int id, @RequestBody Department department) {
+        department.setId(id);
+        System.out.println(department.getId());
         departmentService.save(department);
         return ResponseEntity.ok().build();
     }
