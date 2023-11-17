@@ -12,15 +12,21 @@ import java.util.Optional;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeRepo employeeRepo;
+    private final EmployeeRepo employeeRepo;
+
+    private final DepartmentEmployeeServiceImpl departmentEmployeeService;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepo employeeRepo){
+    public EmployeeServiceImpl(EmployeeRepo employeeRepo, DepartmentEmployeeServiceImpl departmentEmployeeService){
         this.employeeRepo = employeeRepo;
+        this.departmentEmployeeService = departmentEmployeeService;
     }
 
     @Override
     public void delete(Employee elem) {
+        if (departmentEmployeeService.findByEmployeeId(elem.getId()).isPresent()) {
+            departmentEmployeeService.delete(departmentEmployeeService.findByEmployeeId(elem.getId()).get());
+        }
         employeeRepo.delete(elem);
     }
 
