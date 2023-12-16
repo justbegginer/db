@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.DELETE, "/rest/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/rest/**").hasRole("ADMIN") // TODO doesn't work post requests
+                        .requestMatchers(HttpMethod.POST, "/rest/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/rest/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/rest/**").hasAnyRole("ADMIN", "OBSERVER")
                         .anyRequest().authenticated()
@@ -51,21 +51,11 @@ public class SecurityConfig {
         for (User user : userList) {
             springSecurityUserList.add(org.springframework.security.core.userdetails.User.builder()
                     .username(user.getLogin())
-                    .password(passwordEncoder().encode(user.getPassword()))
+                    .password(user.getPassword())
                     .roles(user.getRole())
                     .build()
             );
         }
-//        springSecurityUserList.add(User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles(Role.ADMIN.name())
-//                .build());
-//        springSecurityUserList.add(User.builder()
-//                .username("observer")
-//                .password(passwordEncoder().encode("observer"))
-//                .roles(Role.OBSERVER.name())
-//                .build());
         return new InMemoryUserDetailsManager(
                 springSecurityUserList
         );

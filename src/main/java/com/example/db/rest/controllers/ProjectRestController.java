@@ -50,6 +50,7 @@ public class ProjectRestController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateEmployee(@PathVariable("id") int id, @RequestBody Project project) {
+        project.setId(id);
         projectService.save(project);
         return ResponseEntity.ok().build();
     }

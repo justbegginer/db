@@ -4,11 +4,14 @@ import com.example.db.models.Department;
 import com.example.db.models.Project;
 import com.example.db.services.impls.ProjectServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Optional;
 
@@ -52,7 +55,8 @@ public class ProjectController {
             return "redirect:/department/"+departmentId;
         }
         else{
-            return "/errors/departmentOfProjectNotFind";
+            // check http status code class and how it's work
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, String.format("The project named %s is not assigned to any department", projectService.findById(projectId).get().getName().toUpperCase()));
         }
 
     }
